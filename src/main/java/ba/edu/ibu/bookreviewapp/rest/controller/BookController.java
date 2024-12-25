@@ -53,6 +53,11 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
+        Book updatedBook = bookService.updateBook(id, bookDTO);
+        return ResponseEntity.ok(updatedBook);
+    }
 
 
 
@@ -64,10 +69,6 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
-        Book updated = bookService.updateBook(id, updatedBook);
-        return ResponseEntity.ok(updated);
-    }*/
+
 }
 
