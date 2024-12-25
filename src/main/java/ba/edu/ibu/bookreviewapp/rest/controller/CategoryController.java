@@ -16,9 +16,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
@@ -29,6 +32,12 @@ public class CategoryController {
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         Optional<Category> category = categoryService.getCategoryById(id);
         return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/suggest")
+    public ResponseEntity<String> suggestCategory(@RequestParam String title) {
+        String category = categoryService.suggestCategory(title);
+        return ResponseEntity.ok(category);
     }
 
     @PostMapping
