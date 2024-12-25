@@ -9,4 +9,4 @@ spring:
       ddl-auto: update
 
 googlebooks:
-    secret: "AIzaSyCSXOGkS4Hub28a-8oEhEQlerJinT5eKHI"
+    secret: ${GOOGLE_BOOKS_API_KEY}
