@@ -4,6 +4,8 @@ import ba.edu.ibu.bookreviewapp.core.model.Book;
 import ba.edu.ibu.bookreviewapp.core.model.User;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
 import ba.edu.ibu.bookreviewapp.core.service.BookService;
+import ba.edu.ibu.bookreviewapp.rest.dto.BookDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,9 +48,15 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        return ResponseEntity.ok(bookService.saveBook(book));
+    public ResponseEntity<Book> createBook(@RequestBody BookDTO bookDTO) {
+        Book savedBook = bookService.createBook(bookDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
+
+
+
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
@@ -56,10 +64,10 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
         Book updated = bookService.updateBook(id, updatedBook);
         return ResponseEntity.ok(updated);
-    }
+    }*/
 }
 

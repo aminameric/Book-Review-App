@@ -15,6 +15,9 @@ public class User {
     public User(String email) {
         this.email = email;
     }
+    //when deleting user to delete its books and reviews
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books;
 
     public User() {}
 

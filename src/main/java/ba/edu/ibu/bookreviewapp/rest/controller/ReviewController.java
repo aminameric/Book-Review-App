@@ -2,7 +2,10 @@ package ba.edu.ibu.bookreviewapp.rest.controller;
 
 import ba.edu.ibu.bookreviewapp.core.model.Review;
 import ba.edu.ibu.bookreviewapp.core.model.Book;
+import ba.edu.ibu.bookreviewapp.core.model.User;
 import ba.edu.ibu.bookreviewapp.core.service.ReviewService;
+import ba.edu.ibu.bookreviewapp.rest.dto.ReviewDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +33,26 @@ public class ReviewController {
         return review.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Create a new review
     @PostMapping
-    public ResponseEntity<Review> createReview(@RequestBody Review review) {
-        return ResponseEntity.ok(reviewService.saveReview(review));
+    public ResponseEntity<Review> createReview(@RequestBody ReviewDTO reviewDTO) {
+        System.out.println("Received ReviewDTO: " + reviewDTO);
+
+        // Delegate to the service layer
+        Review savedReview = reviewService.createReview(reviewDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReview);
     }
 
+
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
-        reviewService.deleteReview(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id); // Assuming this deletes the review
+        return ResponseEntity.ok()
+                .header("Custom-Header", "Review Deleted Successfully")
+                .body("Review with ID " + id + " was successfully deleted.");
     }
+
+
 }

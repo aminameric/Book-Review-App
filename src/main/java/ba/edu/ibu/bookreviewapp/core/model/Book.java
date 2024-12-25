@@ -37,8 +37,15 @@ public class Book {
         this.user = user;
     }
 
-    protected Book() {
+    public Book() {
     }
+    public void setUser(@org.jetbrains.annotations.NotNull User user) {
+        this.user = user;
+    }
+
+    public void setReviews(List<Review> reviews) {
+    }
+
 
     public enum ReadingStatus {
         NOT_STARTED, IN_PROGRESS, COMPLETED
