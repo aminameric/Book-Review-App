@@ -1,12 +1,21 @@
 package ba.edu.ibu.bookreviewapp.rest.dto;
 
-public class ReviewDTO {
-    private String content;
-    private Float rating;
-    private Long userId;
-    private Long bookId;
+public class UserBookDTO {
+    private Long id; // ID for the user-books entry
+    private String content; // Review content
+    private Float rating; // Rating of the book
+    private Long userId; // Reference to the user
+    private Long bookId; // Reference to the book
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getContent() {
         return content;
     }
@@ -38,4 +47,5 @@ public class ReviewDTO {
     public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
+
 }

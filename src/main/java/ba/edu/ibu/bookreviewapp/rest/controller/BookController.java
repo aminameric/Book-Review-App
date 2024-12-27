@@ -1,7 +1,6 @@
 package ba.edu.ibu.bookreviewapp.rest.controller;
 
 import ba.edu.ibu.bookreviewapp.core.model.Book;
-import ba.edu.ibu.bookreviewapp.core.model.User;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
 import ba.edu.ibu.bookreviewapp.core.service.BookService;
 import ba.edu.ibu.bookreviewapp.rest.dto.BookDTO;
@@ -33,13 +32,6 @@ public class BookController {
         return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Book>> getBooksByUser(@PathVariable Long userId) {
-        User user = new User();
-        user.setId(userId);
-        return ResponseEntity.ok(bookService.getBooksByUser(user));
-    }
-
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<Book>> getBooksByCategory(@PathVariable Long categoryId) {
         Category category = new Category();
@@ -53,22 +45,19 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
 
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
         Book updatedBook = bookService.updateBook(id, bookDTO);
         return ResponseEntity.ok(updatedBook);
     }
 
-
-
-
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok()
+                .header("Custom-Header", "Book Deletion Successful")
+                .body("Book with ID " + id + " was successfully deleted.");
     }
-
-
 }
-

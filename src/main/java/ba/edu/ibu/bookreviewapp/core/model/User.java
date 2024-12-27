@@ -1,8 +1,12 @@
 package ba.edu.ibu.bookreviewapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity(name = "users")
 public class User {
 
@@ -10,20 +14,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<UserBook> userBooks;
 
     public User(String email) {
         this.email = email;
     }
-    //when deleting user to delete its books and reviews
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Book> books;
 
     public User() {}
 
-    //gettters and setters
-
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -40,5 +44,11 @@ public class User {
         this.email = email;
     }
 
-}
+    public List<UserBook> getUserBooks() {
+        return userBooks;
+    }
 
+    public void setUserBooks(List<UserBook> userBooks) {
+        this.userBooks = userBooks;
+    }
+}

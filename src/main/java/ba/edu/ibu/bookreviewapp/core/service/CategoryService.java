@@ -1,6 +1,5 @@
 package ba.edu.ibu.bookreviewapp.core.service;
 
-import ba.edu.ibu.bookreviewapp.core.api.categorysuggestor.CategorySuggestor;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
 import ba.edu.ibu.bookreviewapp.core.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -12,12 +11,9 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategorySuggestor categorySuggestor;
 
-    // Constructor Dependency Injection
-    public CategoryService(CategoryRepository categoryRepository, CategorySuggestor categorySuggestor) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.categorySuggestor = categorySuggestor;
     }
 
     public List<Category> getAllCategories() {
@@ -32,7 +28,6 @@ public class CategoryService {
         return categoryRepository.findByName(name);
     }
 
-
     public Category saveCategory(Category category) {
         return categoryRepository.save(category);
     }
@@ -40,10 +35,4 @@ public class CategoryService {
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }
-
-
-    public String suggestCategory(String title) {
-        return categorySuggestor.suggestCategory(title);
-    }
 }
-

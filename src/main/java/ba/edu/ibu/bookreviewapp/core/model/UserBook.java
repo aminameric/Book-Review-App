@@ -1,11 +1,13 @@
 package ba.edu.ibu.bookreviewapp.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
 
-@Entity(name = "reviews")
-public class Review {
+
+
+@Entity(name = "user_books")
+public class UserBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +26,17 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
-    // Constructors
-    public Review(String content, Float rating, Book book, User user) {
+    public UserBook(String content, Float rating, Book book, User user) {
         this.content = content;
         this.rating = rating;
         this.book = book;
         this.user = user;
     }
 
-    public Review() {}
+    public UserBook() {}
 
     // Getters and Setters
     public Long getId() {
@@ -73,7 +75,7 @@ public class Review {
         return user;
     }
 
-    public void setUser(@NotNull User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

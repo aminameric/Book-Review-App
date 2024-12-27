@@ -1,8 +1,13 @@
 package ba.edu.ibu.bookreviewapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity(name = "books")
 public class Book {
 
@@ -18,87 +23,80 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private ReadingStatus readingStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference
+    @JsonIgnore // Avoid serialization of books in Category
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference // Handles serialization for bidirectional mapping
+    private List<UserBook> userBooks;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Review> reviews;
-
-    public Book(String title, String author, ReadingStatus readingStatus, Category category, User user) {
+    // Constructors
+    public Book(String title, String author, ReadingStatus readingStatus, Category category) {
         this.title = title;
         this.author = author;
         this.readingStatus = readingStatus;
         this.category = category;
-        this.user = user;
     }
 
-    public Book() {
-    }
-    public void setUser(@org.jetbrains.annotations.NotNull User user) {
-        this.user = user;
-    }
+    public Book() {}
 
-    public void setReviews(List<Review> reviews) {
+    public void setUser(User user) {
     }
 
-
+    // Enum for reading status
     public enum ReadingStatus {
         NOT_STARTED, IN_PROGRESS, COMPLETED
     }
 
-    // Getters
+    // Getters and Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public ReadingStatus getReadingStatus() {
-        return readingStatus;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 
     public void setAuthor(String author) {
         this.author = author;
     }
 
+    public ReadingStatus getReadingStatus() {
+        return readingStatus;
+    }
+
     public void setReadingStatus(ReadingStatus readingStatus) {
         this.readingStatus = readingStatus;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
     }
 
+    public List<UserBook> getUserBooks() {
+        return userBooks;
+    }
+
+    public void setUserBooks(List<UserBook> userBooks) {
+        this.userBooks = userBooks;
+    }
 }

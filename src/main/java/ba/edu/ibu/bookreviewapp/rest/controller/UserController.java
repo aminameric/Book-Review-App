@@ -2,6 +2,7 @@ package ba.edu.ibu.bookreviewapp.rest.controller;
 
 import ba.edu.ibu.bookreviewapp.core.model.User;
 import ba.edu.ibu.bookreviewapp.core.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,18 +32,16 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        user.setId(null); // Ensure the ID is not included in the save operation
+        user.setId(null);
         User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent()
-                .header("Custom-Header", "User Deleted Successfully")
-                .build();
+        return ResponseEntity.ok()
+                .header("Custom-Header", "User Deletion Successful")
+                .body("User with ID " + id + " was successfully deleted.");
     }
-
 }
-

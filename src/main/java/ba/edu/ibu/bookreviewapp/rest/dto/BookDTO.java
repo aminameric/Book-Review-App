@@ -3,7 +3,7 @@ package ba.edu.ibu.bookreviewapp.rest.dto;
 public class BookDTO {
     private String title;
     private String author;
-    private String readingStatus;
+    private String readingStatus; // Enum as a String
     private Long categoryId; // For existing categories
     private String categoryName; // For new categories
     private Long userId;
@@ -50,10 +50,10 @@ public class BookDTO {
     }
 
     public Long getUserId() {
-        return userId;
+        return userId; // Return the actual value
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        this.userId = userId; // Properly set the userId
     }
 }

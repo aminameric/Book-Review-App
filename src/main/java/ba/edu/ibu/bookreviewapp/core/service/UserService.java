@@ -3,7 +3,6 @@ package ba.edu.ibu.bookreviewapp.core.service;
 import ba.edu.ibu.bookreviewapp.core.model.User;
 import ba.edu.ibu.bookreviewapp.core.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // Constructor Dependency Injection
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -34,9 +32,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 }
-
