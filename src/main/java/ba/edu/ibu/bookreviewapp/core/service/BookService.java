@@ -83,12 +83,18 @@ public class BookService {
         book.setTitle(bookDTO.getTitle());
         book.setAuthor(bookDTO.getAuthor());
         book.setReadingStatus(Book.ReadingStatus.valueOf(bookDTO.getReadingStatus()));
-        book.setUser(user);
+        book.setUser(user); // Set the user
         book.setCategory(category);
 
         // Save and return the book
         return bookRepository.save(book);
     }
+
+
+    public List<Book> getBooksByUserEmail(String email) {
+        return bookRepository.findBooksByUserEmail(email);
+    }
+
 
 
 

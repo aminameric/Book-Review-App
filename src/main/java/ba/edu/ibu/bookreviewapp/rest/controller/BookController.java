@@ -39,6 +39,13 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBooksByCategory(category));
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<Book>> getBooksByUserEmail(@RequestParam String email) {
+        List<Book> books = bookService.getBooksByUserEmail(email);
+        return ResponseEntity.ok(books);
+    }
+
+
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody BookDTO bookDTO) {
         Book savedBook = bookService.createBook(bookDTO);
@@ -60,4 +67,7 @@ public class BookController {
                 .header("Custom-Header", "Book Deletion Successful")
                 .body("Book with ID " + id + " was successfully deleted.");
     }
+
+
+
 }

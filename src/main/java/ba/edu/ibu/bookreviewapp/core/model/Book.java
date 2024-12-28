@@ -23,11 +23,13 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private ReadingStatus readingStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonBackReference
-    @JsonIgnore // Avoid serialization of books in Category
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference // Handles serialization for bidirectional mapping
@@ -44,6 +46,7 @@ public class Book {
     public Book() {}
 
     public void setUser(User user) {
+        this.user = user;
     }
 
     // Enum for reading status
