@@ -39,8 +39,11 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
-
-
+    @GetMapping("/suggest")
+    public ResponseEntity<String> suggestCategory(@RequestParam String title) {
+        String category = categoryService.suggestCategory(title);
+        return ResponseEntity.ok(category);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id) {

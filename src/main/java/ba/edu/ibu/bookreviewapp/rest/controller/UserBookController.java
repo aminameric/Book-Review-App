@@ -44,4 +44,14 @@ public class UserBookController {
                 .header("Custom-Header", "UserBook Deletion Successful")
                 .body("UserBook with ID " + id + " was successfully deleted.");
     }
+
+    @GetMapping("/review")
+    public ResponseEntity<UserBook> getReviewForBookByUser(
+            @RequestParam Long bookId,
+            @RequestParam Long userId
+    ) {
+        Optional<UserBook> userBook = userBookService.getUserBookByBookIdAndUserId(bookId, userId);
+        return userBook.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

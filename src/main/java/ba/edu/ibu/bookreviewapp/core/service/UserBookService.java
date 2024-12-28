@@ -62,4 +62,10 @@ public class UserBookService {
     public void deleteUserBook(Long id) {
         userBookRepository.deleteById(id);
     }
+
+    public Optional<UserBook> getUserBookByBookIdAndUserId(Long bookId, Long userId) {
+        return userBookRepository.findByBookIdAndUserId(bookId, userId);
+    }
+
+
 }

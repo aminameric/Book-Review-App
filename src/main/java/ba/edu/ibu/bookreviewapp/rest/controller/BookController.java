@@ -2,6 +2,7 @@ package ba.edu.ibu.bookreviewapp.rest.controller;
 
 import ba.edu.ibu.bookreviewapp.core.model.Book;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
+import ba.edu.ibu.bookreviewapp.core.model.UserBook;
 import ba.edu.ibu.bookreviewapp.core.service.BookService;
 import ba.edu.ibu.bookreviewapp.rest.dto.BookDTO;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,8 @@ public class BookController {
         List<Book> books = bookService.getBooksByUserEmail(email);
         return ResponseEntity.ok(books);
     }
+
+
 
 
     @PostMapping
