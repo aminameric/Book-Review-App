@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/user-books")
 public class UserBookController {
@@ -54,4 +55,27 @@ public class UserBookController {
         return userBook.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserBook> updateReview(
+            @PathVariable Long id,
+            @RequestBody UserBook userBook
+    ) {
+        // Log the incoming data
+        System.out.println("Path ID: " + id);
+        System.out.println("Request Body ID: " + userBook.getId());
+        System.out.println("Request Body Content: " + userBook.getContent());
+        System.out.println("Request Body Rating: " + userBook.getRating());
+
+        // Validate the ID in the path matches the ID in the body
+        if (userBook.getId() == null || !id.equals(userBook.getId())) {
+            System.out.println("ID Mismatch: Path ID does not match UserBook ID");
+            return ResponseEntity.badRequest().build();
+        }
+
+        UserBook updatedReview = userBookService.updateReview(userBook);
+        return ResponseEntity.ok(updatedReview);
+    }
+
+
 }
