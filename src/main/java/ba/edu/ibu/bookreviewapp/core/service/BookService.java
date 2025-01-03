@@ -90,13 +90,9 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-
     public List<Book> getBooksByUserEmail(String email) {
         return bookRepository.findBooksByUserEmail(email);
     }
-
-
-
 
     @Transactional
     public Book updateBook(Long id, BookDTO bookDTO) {

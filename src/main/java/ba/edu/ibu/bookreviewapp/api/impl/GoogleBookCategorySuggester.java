@@ -1,9 +1,8 @@
-package ba.edu.ibu.bookreviewapp.api.implementation.bookapi;
+package ba.edu.ibu.bookreviewapp.api.impl;
 
-import ba.edu.ibu.bookreviewapp.core.api.categorysuggestor.CategorySuggestor;
+import ba.edu.ibu.bookreviewapp.core.api.CategorySuggestor;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

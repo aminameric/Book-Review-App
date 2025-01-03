@@ -1,6 +1,6 @@
 package ba.edu.ibu.bookreviewapp.core.service;
 
-import ba.edu.ibu.bookreviewapp.core.api.categorysuggestor.CategorySuggestor;
+import ba.edu.ibu.bookreviewapp.core.api.CategorySuggestor;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
 import ba.edu.ibu.bookreviewapp.core.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
