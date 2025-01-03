@@ -1,7 +1,7 @@
 package ba.edu.ibu.bookreviewapp.rest.configuration;
 
-import ba.edu.ibu.bookreviewapp.api.implementation.bookapi.GoogleBookCategorySuggester;
-import ba.edu.ibu.bookreviewapp.core.api.categorysuggestor.CategorySuggestor;
+import ba.edu.ibu.bookreviewapp.api.impl.GoogleBookCategorySuggester;
+import ba.edu.ibu.bookreviewapp.core.api.CategorySuggestor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

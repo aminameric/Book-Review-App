@@ -1,10 +1,7 @@
 package ba.edu.ibu.bookreviewapp.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
-
 
 @Entity(name = "user_books")
 public class UserBook {

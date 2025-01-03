@@ -10,6 +10,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     // Custom query method to find a category by name
     Optional<Category> findByName(String name);
-
 }
 
