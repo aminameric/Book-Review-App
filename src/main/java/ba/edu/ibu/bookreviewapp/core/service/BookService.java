@@ -52,7 +52,7 @@ public class BookService {
     @Transactional
     public Book createBook(BookDTO bookDTO) {
         // Validate title
-        if (bookDTO.getTitle() == null || bookDTO.getTitle().isEmpty()) {
+        if (bookDTO.getTitle() == null || bookDTO.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("Title is required.");
         }
 
@@ -66,7 +66,7 @@ public class BookService {
             // Fetch existing Category by ID
             category = categoryRepository.findById(bookDTO.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Category not found with ID: " + bookDTO.getCategoryId()));
-        } else if (bookDTO.getCategoryName() != null && !bookDTO.getCategoryName().isEmpty()) {
+        } else if (bookDTO.getCategoryName() != null && !bookDTO.getCategoryName().trim().isEmpty()) {
             // Fetch existing Category by Name or Create New
             category = categoryRepository.findByName(bookDTO.getCategoryName())
                     .orElseGet(() -> {
@@ -80,15 +80,16 @@ public class BookService {
 
         // Create the book
         Book book = new Book();
-        book.setTitle(bookDTO.getTitle());
+        book.setTitle(bookDTO.getTitle().trim());
         book.setAuthor(bookDTO.getAuthor());
         book.setReadingStatus(Book.ReadingStatus.valueOf(bookDTO.getReadingStatus()));
-        book.setUser(user); // Set the user
+        book.setUser(user);
         book.setCategory(category);
 
         // Save and return the book
         return bookRepository.save(book);
     }
+
 
     public List<Book> getBooksByUserEmail(String email) {
         return bookRepository.findBooksByUserEmail(email);

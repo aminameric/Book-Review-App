@@ -49,7 +49,7 @@ public class Book {
 
     // Enum for reading status
     public enum ReadingStatus {
-        NOT_STARTED, IN_PROGRESS, COMPLETED
+        NOT_STARTED, IN_PROGRESS, READ, COMPLETED
     }
 
     // Getters and Setters
