@@ -46,16 +46,11 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-
-
-
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody BookDTO bookDTO) {
         Book savedBook = bookService.createBook(bookDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
-
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
@@ -70,7 +65,4 @@ public class BookController {
                 .header("Custom-Header", "Book Deletion Successful")
                 .body("Book with ID " + id + " was successfully deleted.");
     }
-
-
-
 }

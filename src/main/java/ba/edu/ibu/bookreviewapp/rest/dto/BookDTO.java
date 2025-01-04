@@ -13,24 +13,12 @@ public class BookDTO {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getReadingStatus() {
         return readingStatus;
-    }
-
-    public void setReadingStatus(String readingStatus) {
-        this.readingStatus = readingStatus;
     }
 
     public Long getCategoryId() {
@@ -43,10 +31,6 @@ public class BookDTO {
 
     public String getCategoryName() {
         return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     public Long getUserId() {

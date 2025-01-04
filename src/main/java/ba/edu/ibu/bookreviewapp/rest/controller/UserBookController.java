@@ -76,6 +76,4 @@ public class UserBookController {
         UserBook updatedReview = userBookService.updateReview(userBook);
         return ResponseEntity.ok(updatedReview);
     }
-
-
 }
