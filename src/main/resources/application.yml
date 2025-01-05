@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/book_review_app?useSSL=false&serverTimezone=UTC
-    username: root
-    password: mina50
+    url: jdbc:mysql://sql.freedb.tech:3306/freedb_book-review-db
+    username: freedb_book-review
+    password: AQ&3Vy7AjvxpPWa
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
