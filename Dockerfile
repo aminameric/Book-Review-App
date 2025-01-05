@@ -8,8 +8,11 @@ RUN mvn clean package -DskipTests
 FROM openjdk:21-jdk-slim
 WORKDIR /app
 
-# Ensure the JAR path is correct and matches the build stage output
+# Ensure the jar is correctly copied
 COPY --from=build /app/target/*.jar book-review.jar
+
+# Explicitly copy the .env file to ensure it's included
 COPY .env .env
+
 EXPOSE 9090
 ENTRYPOINT ["java", "-jar", "book-review.jar"]
