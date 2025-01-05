@@ -1,4 +1,4 @@
-# Stage 1: Build the application using Maven
+# Stage 1: Build the application
 FROM maven:3.9.4-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY . .
@@ -7,11 +7,7 @@ RUN mvn clean package -DskipTests
 # Stage 2: Create a minimal runtime image using OpenJDK
 FROM openjdk:21-jdk-slim
 WORKDIR /app
-
-# Ensure the jar is correctly copied
 COPY --from=build /app/target/*.jar book-review.jar
-
-# Explicitly copy the .env file to ensure it's included
 COPY .env .env
 
 EXPOSE 9090
