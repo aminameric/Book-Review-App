@@ -7,6 +7,14 @@ public class UserBookDTO {
     private Long userId; // Reference to the user
     private Long bookId; // Reference to the book
 
+    public UserBookDTO(long userId, long bookId, String content, float rating) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.content = content;
+        this.rating = rating;
+    }
+
+
     // Getters and Setters
     public Long getId() {
         return id;
