@@ -69,14 +69,19 @@ public class UserBookService {
 
     @Transactional
     public UserBook updateReviewDTO(UserBook existingReview, UserBookDTO reviewDTO) {
-        // Updating only if fields are provided
+        // Ensure the provided review has a valid ID before attempting an update
+        if (existingReview.getId() == null) {
+            throw new IllegalArgumentException("Review ID must be provided for update.");
+        }
+
+        // Update fields only if provided in the DTO
         if (reviewDTO.getContent() != null) {
             existingReview.setContent(reviewDTO.getContent());
         }
         if (reviewDTO.getRating() != null) {
             existingReview.setRating(reviewDTO.getRating());
         }
+
         return userBookRepository.save(existingReview);
     }
-
 }

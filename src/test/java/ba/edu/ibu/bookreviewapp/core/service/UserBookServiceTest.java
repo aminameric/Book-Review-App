@@ -114,34 +114,47 @@ class UserBookServiceTest {
     void testUpdateUserBook_Success() {
         UserBook userBook = new UserBook();
         userBook.setId(1L);
-        userBook.setContent("Updated Content");
-        userBook.setRating(4F);
+        userBook.setContent("Old Content");
+        userBook.setRating(3.0F);
+
+        UserBookDTO reviewDTO = new UserBookDTO();
+        reviewDTO.setContent("Updated Content");
+        reviewDTO.setRating(4F);
 
         when(userBookRepository.findById(1L)).thenReturn(Optional.of(userBook));
         when(userBookRepository.save(any(UserBook.class))).thenReturn(userBook);
 
-        UserBook result = userBookService.updateReview(userBook);
+        UserBook result = userBookService.updateReviewDTO(userBook, reviewDTO);
 
         assertThat(result).isNotNull();
         assertThat(result.getContent()).isEqualTo("Updated Content");
+        assertThat(result.getRating()).isEqualTo(4F);
         verify(userBookRepository).save(any(UserBook.class));
+    }
+
+    @Test
+    void testUpdateUserBook_MissingId() {
+        UserBook userBook = new UserBook();  // No ID set
+        UserBookDTO reviewDTO = new UserBookDTO();
+        reviewDTO.setContent("Content Missing ID");
+
+        assertThrows(IllegalArgumentException.class,
+                () -> userBookService.updateReviewDTO(userBook, reviewDTO));
+
+        verify(userBookRepository, never()).save(any(UserBook.class));
     }
 
     @Test
     void testUpdateUserBook_NotFound() {
         UserBook userBook = new UserBook();
-        userBook.setId(1L);
+        userBook.setId(null);  // Simulating missing ID
+        UserBookDTO reviewDTO = new UserBookDTO();
+        reviewDTO.setContent("Updated Content");
 
-        when(userBookRepository.findById(1L)).thenReturn(Optional.empty());
+        // Expecting an exception due to the missing ID
+        assertThrows(IllegalArgumentException.class,
+                () -> userBookService.updateReviewDTO(userBook, reviewDTO));
 
-        assertThrows(RuntimeException.class, () -> userBookService.updateReview(userBook));
-        verify(userBookRepository).findById(1L);
-    }
-
-    @Test
-    void testUpdateUserBook_MissingId() {
-        UserBook userBook = new UserBook();
-
-        assertThrows(IllegalArgumentException.class, () -> userBookService.updateReview(userBook));
+        verify(userBookRepository, never()).save(any(UserBook.class));
     }
 }
