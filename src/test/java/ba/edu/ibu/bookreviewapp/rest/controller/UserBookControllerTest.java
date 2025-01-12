@@ -87,7 +87,7 @@ class UserBookControllerTest {
         when(userBookService.createUserBook(any(UserBookDTO.class))).thenReturn(savedUserBook);
 
         // Performing the test
-        ResponseEntity<UserBook> response = userBookController.createUserBook(userBookDTO);
+        ResponseEntity<UserBook> response = (ResponseEntity<UserBook>) userBookController.createUserBook(userBookDTO);
 
         // Asserting the results
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -143,24 +143,35 @@ class UserBookControllerTest {
         userBook.setContent("Updated Review");
         userBook.setRating(4.5f);
 
-        when(userBookService.updateReview(userBook)).thenReturn(userBook);
+        UserBookDTO reviewDTO = new UserBookDTO();
+        reviewDTO.setContent("Updated Review");
+        reviewDTO.setRating(4.5f);
+        reviewDTO.setUserId(1L);
+        reviewDTO.setBookId(1L);
 
-        ResponseEntity<UserBook> response = userBookController.updateReview(1L, userBook);
+        when(userBookService.getUserBookByBookIdAndUserId(1L, 1L)).thenReturn(Optional.of(userBook));
+        when(userBookService.updateReviewDTO(userBook, reviewDTO)).thenReturn(userBook);
+
+        ResponseEntity<?> response = userBookController.updateReview(1L, reviewDTO);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Updated Review", response.getBody().getContent());
-        verify(userBookService, times(1)).updateReview(userBook);
+        assertEquals("Updated Review", ((UserBook) response.getBody()).getContent());
+        verify(userBookService, times(1)).updateReviewDTO(userBook, reviewDTO);
     }
 
     @Test
-    void testUpdateReview_IdMismatch() {
-        UserBook userBook = new UserBook();
-        userBook.setId(2L);
-        userBook.setContent("Updated Review");
+    void testUpdateReview_NotFound() {
+        UserBookDTO reviewDTO = new UserBookDTO();
+        reviewDTO.setUserId(1L);
+        reviewDTO.setBookId(1L);
+        reviewDTO.setContent("Updated Review");
 
-        ResponseEntity<UserBook> response = userBookController.updateReview(1L, userBook);
+        when(userBookService.getUserBookByBookIdAndUserId(1L, 1L)).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(userBookService, never()).updateReview(userBook);
+        ResponseEntity<?> response = userBookController.updateReview(1L, reviewDTO);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(userBookService, never()).updateReviewDTO(any(UserBook.class), any(UserBookDTO.class));
     }
+
 }

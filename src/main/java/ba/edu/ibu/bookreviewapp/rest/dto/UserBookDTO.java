@@ -14,7 +14,8 @@ public class UserBookDTO {
         this.rating = rating;
     }
 
-
+    public UserBookDTO() {
+    }
     // Getters and Setters
     public Long getId() {
         return id;
