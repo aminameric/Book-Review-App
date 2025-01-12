@@ -68,32 +68,15 @@ public class UserBookService {
     }
 
     @Transactional
-    public UserBook updateReview(UserBook userBook) {
-        System.out.println("Updating Review: " + userBook);
-
-        // Validate that the ID is provided
-        if (userBook.getId() == null) {
-            throw new IllegalArgumentException("UserBook ID must be provided for update.");
+    public UserBook updateReviewDTO(UserBook existingReview, UserBookDTO reviewDTO) {
+        // Updating only if fields are provided
+        if (reviewDTO.getContent() != null) {
+            existingReview.setContent(reviewDTO.getContent());
         }
-
-        // Fetch the existing review by ID
-        UserBook existingReview = userBookRepository.findById(userBook.getId())
-                .orElseThrow(() -> new RuntimeException("Review not found with ID: " + userBook.getId()));
-
-        System.out.println("Existing Review: " + existingReview);
-
-        // Update only the fields provided in the request
-        if (userBook.getContent() != null) {
-            existingReview.setContent(userBook.getContent());
+        if (reviewDTO.getRating() != null) {
+            existingReview.setRating(reviewDTO.getRating());
         }
-        if (userBook.getRating() != null) {
-            existingReview.setRating(userBook.getRating());
-        }
-
-        // Save and return the updated review
-        UserBook savedReview = userBookRepository.save(existingReview);
-        System.out.println("Saved Review: " + savedReview);
-
-        return savedReview;
+        return userBookRepository.save(existingReview);
     }
+
 }

@@ -32,12 +32,6 @@ public class UserBookController {
         return userBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<UserBook> createUserBook(@RequestBody UserBookDTO reviewDTO) {
-        UserBook savedUserBook = userBookService.createUserBook(reviewDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserBook);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserBook(@PathVariable Long id) {
         userBookService.deleteUserBook(id);
@@ -56,24 +50,42 @@ public class UserBookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserBook> updateReview(
-            @PathVariable Long id,
-            @RequestBody UserBook userBook
-    ) {
-        // Log the incoming data
-        System.out.println("Path ID: " + id);
-        System.out.println("Request Body ID: " + userBook.getId());
-        System.out.println("Request Body Content: " + userBook.getContent());
-        System.out.println("Request Body Rating: " + userBook.getRating());
-
-        // Validate the ID in the path matches the ID in the body
-        if (userBook.getId() == null || !id.equals(userBook.getId())) {
-            System.out.println("ID Mismatch: Path ID does not match UserBook ID");
-            return ResponseEntity.badRequest().build();
+    @PostMapping
+    public ResponseEntity<?> createUserBook(@RequestBody UserBookDTO reviewDTO) {
+        // Validate the provided data
+        if (reviewDTO.getUserId() == null || reviewDTO.getBookId() == null || reviewDTO.getRating() == null) {
+            return ResponseEntity.badRequest().body("User ID, Book ID, and Rating must be provided.");
         }
 
-        UserBook updatedReview = userBookService.updateReview(userBook);
-        return ResponseEntity.ok(updatedReview);
+        try {
+            UserBook savedUserBook = userBookService.createUserBook(reviewDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUserBook);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create review: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateReview(
+            @PathVariable Long id,
+            @RequestBody UserBookDTO reviewDTO
+    ) {
+        // Validate input data
+        if (reviewDTO.getUserId() == null || reviewDTO.getBookId() == null) {
+            return ResponseEntity.badRequest().body("User ID and Book ID must be provided.");
+        }
+
+        // Attempt to update the review
+        Optional<UserBook> existingReview = userBookService.getUserBookByBookIdAndUserId(reviewDTO.getBookId(), reviewDTO.getUserId());
+        if (existingReview.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found.");
+        }
+
+        try {
+            UserBook updatedReview = userBookService.updateReviewDTO(existingReview.get(), reviewDTO);
+            return ResponseEntity.ok(updatedReview);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update review: " + e.getMessage());
+        }
     }
 }
