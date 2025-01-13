@@ -13,3 +13,7 @@ spring:
 
 googlebooks:
     secret: ${GOOGLE_BOOKS_API_KEY}
+
+cors:
+  allowed:
+    origins: http://localhost:3000,${FRONTEND_URL}
