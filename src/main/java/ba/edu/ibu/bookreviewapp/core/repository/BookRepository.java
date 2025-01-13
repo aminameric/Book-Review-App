@@ -2,6 +2,7 @@ package ba.edu.ibu.bookreviewapp.core.repository;
 
 import ba.edu.ibu.bookreviewapp.core.model.Book;
 import ba.edu.ibu.bookreviewapp.core.model.Category;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM books b WHERE b.user.email = :email")
     List<Book> findBooksByUserEmail(@Param("email") String email);
+
+
+    List<Book> findByReadingStatusAndTitleContainingIgnoreCaseAndAuthorContainingIgnoreCaseAndCategory_NameContainingIgnoreCase(
+            Book.ReadingStatus readingStatus, String title, String author, String category, Sort sort);
+
+    List<Book> findByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCaseAndCategory_NameContainingIgnoreCase(
+            String title, String author, String category, Sort sort);
 
 }
 
