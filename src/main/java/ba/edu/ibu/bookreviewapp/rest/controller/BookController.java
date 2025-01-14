@@ -5,6 +5,7 @@ import ba.edu.ibu.bookreviewapp.core.model.Category;
 import ba.edu.ibu.bookreviewapp.core.model.UserBook;
 import ba.edu.ibu.bookreviewapp.core.service.BookService;
 import ba.edu.ibu.bookreviewapp.rest.dto.BookDTO;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,5 +65,23 @@ public class BookController {
         return ResponseEntity.ok()
                 .header("Custom-Header", "Book Deletion Successful")
                 .body("Book with ID " + id + " was successfully deleted.");
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Book>> getFilteredBooks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String readingStatus,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String order) {
+
+        try {
+            Sort sort = order.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+            List<Book> filteredBooks = bookService.getFilteredBooks(title, author, readingStatus, category, sort);
+            return ResponseEntity.ok(filteredBooks);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }

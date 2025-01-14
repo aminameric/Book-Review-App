@@ -7,6 +7,7 @@ import ba.edu.ibu.bookreviewapp.core.repository.UserRepository;
 import ba.edu.ibu.bookreviewapp.core.repository.BookRepository;
 import ba.edu.ibu.bookreviewapp.core.repository.CategoryRepository;
 import ba.edu.ibu.bookreviewapp.rest.dto.BookDTO;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,4 +141,21 @@ public class BookService {
         // Save the updated book
         return bookRepository.save(book);
     }
+
+    public List<Book> getFilteredBooks(String title, String author, String readingStatus, String category, Sort sort) {
+        if (readingStatus != null && !readingStatus.isEmpty()) {
+            try {
+                Book.ReadingStatus enumStatus = Book.ReadingStatus.valueOf(readingStatus.toUpperCase());
+                return bookRepository.findByReadingStatusAndTitleContainingIgnoreCaseAndAuthorContainingIgnoreCaseAndCategory_NameContainingIgnoreCase(
+                        enumStatus, title != null ? title : "", author != null ? author : "", category != null ? category : "", sort);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid reading status provided. Allowed values: COMPLETED, IN_PROGRESS, NOT_STARTED.");
+            }
+        } else {
+            return bookRepository.findByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCaseAndCategory_NameContainingIgnoreCase(
+                    title != null ? title : "", author != null ? author : "", category != null ? category : "", sort);
+        }
+    }
 }
+
+
