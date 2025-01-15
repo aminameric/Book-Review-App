@@ -11,8 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -156,6 +155,33 @@ public class BookService {
                     title != null ? title : "", author != null ? author : "", category != null ? category : "", sort);
         }
     }
+
+    public List<Map<String, Object>> generateUserReport(String email) {
+        List<Book> books = bookRepository.findBooksByUserEmail(email);
+        Map<String, Map<String, Integer>> reportMap = new HashMap<>();
+
+        for (Book book : books) {
+            String category = book.getCategory().getName();
+            String status = book.getReadingStatus().toString();
+
+            reportMap.putIfAbsent(category, new HashMap<>());
+            reportMap.get(category).put(status, reportMap.get(category).getOrDefault(status, 0) + 1);
+        }
+
+        // Converting map structure to list of maps for the frontend
+        List<Map<String, Object>> reportList = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Integer>> entry : reportMap.entrySet()) {
+            for (Map.Entry<String, Integer> statusEntry : entry.getValue().entrySet()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("category", entry.getKey());
+                row.put("status", statusEntry.getKey());
+                row.put("count", statusEntry.getValue());
+                reportList.add(row);
+            }
+        }
+        return reportList;
+    }
+
 }
 
 

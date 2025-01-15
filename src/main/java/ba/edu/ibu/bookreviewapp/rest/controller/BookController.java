@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -84,4 +85,11 @@ public class BookController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("/report")
+    public ResponseEntity<List<Map<String, Object>>> getUserReport(@RequestParam String email) {
+        List<Map<String, Object>> report = bookService.generateUserReport(email);
+        return ResponseEntity.ok(report);
+    }
+
 }
